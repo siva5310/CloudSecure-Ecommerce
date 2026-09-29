@@ -29,8 +29,8 @@ jobs:
           chmod 600 deploy_key
           scp -o StrictHostKeyChecking=no \
             -i deploy_key \
-            cloudsecure-deploy.tar.gz \
-            ubuntu@$EC2_HOST:/tmp/cloudsecure-deploy.tar.gz \
+            /tmp/cloudsecure-deploy.tar.gz \
+            ubuntu@$EC2_HOST:/tmp/cloudsecure-deploy.tar.gz
 
       - name: Deploy and restart application
         env:
