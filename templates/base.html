@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="CloudSecure Store - a Flask e-commerce demonstration">
+<title>{% block title %}CloudSecure Store{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="header">
+  <div class="container nav">
+    <a href="{{ url_for('home') }}" class="logo"><span class="logo-mark">CS</span><span>CloudSecure</span></a>
+    <form class="search" action="{{ url_for('shop') }}">
+      <input name="q" value="{{ request.args.get('q','') }}" placeholder="Search laptops, audio, accessories...">
+      <button aria-label="Search">⌕</button>
+    </form>
+    <nav>
+      <a href="{{ url_for('shop') }}">Shop</a>
+      <a href="{{ url_for('cart') }}" class="cart-link">Cart <span>{{ cart_count }}</span></a>
+    </nav>
+  </div>
+</header>
+{% block content %}{% endblock %}
+<footer>
+  <div class="container footer-grid">
+    <div><div class="logo light"><span class="logo-mark">CS</span><span>CloudSecure</span></div><p>Modern technology products, delivered through a cloud-hosted demo store.</p></div>
+    <div><h4>Store</h4><a href="{{ url_for('shop') }}">All products</a><a href="{{ url_for('cart') }}">Shopping cart</a></div>
+    <div><h4>Project</h4><span>Flask + SQLite</span><span>Gunicorn + Nginx</span><span>Cloudflare ready</span></div>
+  </div>
+  <div class="container footer-bottom">© 2026 CloudSecure Store · Demo e-commerce application</div>
+</footer>
+</body>
+</html>

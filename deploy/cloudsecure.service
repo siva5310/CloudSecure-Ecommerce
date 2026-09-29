@@ -1,0 +1,15 @@
+[Unit]
+Description=CloudSecure Flask E-Commerce
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/var/www/CloudSecure-Ecommerce
+Environment="PATH=/var/www/CloudSecure-Ecommerce/.venv/bin"
+Environment="SECRET_KEY=CHANGE_THIS_TO_A_LONG_RANDOM_VALUE"
+ExecStart=/var/www/CloudSecure-Ecommerce/.venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

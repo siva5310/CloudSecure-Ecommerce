@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}CloudSecure Store · Technology for everyday work{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow">CLOUD-READY TECHNOLOGY STORE</div>
+      <h1>Technology that<br><em>works for you.</em></h1>
+      <p>Shop laptops, monitors, audio and everyday accessories in a clean e-commerce experience built with Python Flask.</p>
+      <div class="hero-actions"><a class="btn primary" href="{{ url_for('shop') }}">Shop products <span>→</span></a><a class="text-link" href="#featured">Explore collection</a></div>
+      <div class="hero-points"><span>✓ Secure checkout demo</span><span>✓ Fast cloud-ready app</span></div>
+    </div>
+    <div class="hero-visual">
+      <div class="visual-glow"></div>
+      <div class="device">💻</div>
+      <div class="floating-card card-a"><b>4.8/5</b><small>Customer rating</small></div>
+      <div class="floating-card card-b"><b>Cloud Ready</b><small>AWS + Cloudflare</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="container category-strip">
+{% for c in categories %}
+<a href="{{ url_for('shop', category=c['category']) }}"><span>{{ ['💻','🖥️','⌨️','🎧','⌚','🎒'][loop.index0 % 6] }}</span><b>{{ c['category'] }}</b><small>{{ c['count'] }} items</small></a>
+{% endfor %}
+</section>
+
+<section class="container section" id="featured">
+  <div class="section-title"><div><div class="eyebrow">CURATED FOR YOU</div><h2>Featured products</h2></div><a href="{{ url_for('shop') }}" class="text-link">View all →</a></div>
+  <div class="product-grid">
+  {% for p in products %}
+    <article class="product-card">
+      <a class="product-art" href="{{ url_for('product', product_id=p['id']) }}"><span>{{ p['emoji'] }}</span><b>{{ p['category'] }}</b></a>
+      <div class="product-body">
+        <a href="{{ url_for('product', product_id=p['id']) }}"><h3>{{ p['name'] }}</h3></a>
+        <div class="rating">★ {{ p['rating'] }} <span>·</span> {{ p['stock'] }} in stock</div>
+        <div class="price">{{ p['price']|money }} <del>{{ p['old_price']|money }}</del></div>
+        <form method="post" action="{{ url_for('add_to_cart', product_id=p['id']) }}"><button class="btn dark full">Add to cart</button></form>
+      </div>
+    </article>
+  {% endfor %}
+  </div>
+</section>
+
+<section class="benefits"><div class="container benefit-grid"><div><strong>🛡️ Cloud-ready security</strong><span>Designed for Cloudflare WAF and edge protection.</span></div><div><strong>⚡ Production-style stack</strong><span>Flask, Gunicorn and Nginx deployment ready.</span></div><div><strong>📦 Simple checkout</strong><span>Demo orders are stored in SQLite.</span></div></div></section>
+{% endblock %}

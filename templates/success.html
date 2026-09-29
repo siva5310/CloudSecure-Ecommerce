@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed · CloudSecure{% endblock %}
+{% block content %}
+<section class="container success-page"><div class="success-icon">✓</div><div class="eyebrow">ORDER CONFIRMED</div><h1>Thank you, {{ order['customer_name'] }}.</h1><p>Your demo order has been created successfully.</p><div class="order-card"><div><small>Order ID</small><b>{{ order['id'] }}</b></div><div><small>Total</small><b>{{ order['total']|money }}</b></div><div><small>Created</small><b>{{ order['created_at'] }}</b></div></div><div class="order-items">{% for item in items %}<div><span>{{ item['product_name'] }} × {{ item['quantity'] }}</span><b>{{ (item['price'] * item['quantity'])|money }}</b></div>{% endfor %}</div><a class="btn primary" href="{{ url_for('shop') }}">Continue shopping →</a></section>
+{% endblock %}
