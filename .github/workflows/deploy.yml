@@ -1,0 +1,62 @@
+name: Deploy CloudSecure E-Commerce
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Prepare deployment package
+        run: |
+          tar --exclude='.git' \
+              --exclude='.venv' \
+              --exclude='__pycache__' \
+              -czf cloudsecure-deploy.tar.gz .
+
+      - name: Copy package to EC2
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > deploy_key
+          chmod 600 deploy_key
+          scp -o StrictHostKeyChecking=no \
+            -i deploy_key \
+            cloudsecure-deploy.tar.gz \
+            ubuntu@$EC2_HOST:/tmp/cloudsecure-deploy.tar.gz
+
+      - name: Deploy and restart application
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          EC2_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > deploy_key
+          chmod 600 deploy_key
+
+          ssh -o StrictHostKeyChecking=no \
+            -i deploy_key \
+            ubuntu@$EC2_HOST << 'EOF'
+
+          rm -rf /tmp/cloudsecure-release
+          mkdir -p /tmp/cloudsecure-release
+
+          tar -xzf /tmp/cloudsecure-deploy.tar.gz \
+            -C /tmp/cloudsecure-release
+
+          sudo cp -a /tmp/cloudsecure-release/. \
+            /var/www/CloudSecure-Ecommerce/
+
+          sudo systemctl restart cloudsecure.service
+          sudo systemctl reload nginx
+
+          sudo systemctl is-active cloudsecure.service
+          sudo systemctl is-active nginx
+
+          EOF
