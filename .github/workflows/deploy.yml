@@ -18,7 +18,7 @@ jobs:
           tar --exclude='.git' \
               --exclude='.venv' \
               --exclude='__pycache__' \
-              -czf cloudsecure-deploy.tar.gz .
+              -czf /tmp/cloudsecure-deploy.tar.gz .
 
       - name: Copy package to EC2
         env:
@@ -30,7 +30,7 @@ jobs:
           scp -o StrictHostKeyChecking=no \
             -i deploy_key \
             cloudsecure-deploy.tar.gz \
-            ubuntu@$EC2_HOST:/tmp/cloudsecure-deploy.tar.gz
+            ubuntu@$EC2_HOST:/tmp/cloudsecure-deploy.tar.gz \
 
       - name: Deploy and restart application
         env:
