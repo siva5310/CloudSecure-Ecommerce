@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ product['name'] }} · CloudSecure{% endblock %}
+{% block content %}
+<section class="container product-page">
+  <div class="detail-art"><span>{{ product['emoji'] }}</span><small>{{ product['category'] }}</small></div>
+  <div class="detail-info"><div class="eyebrow">{{ product['category'] }}</div><h1>{{ product['name'] }}</h1><div class="rating large-rating">★ {{ product['rating'] }} <span>·</span> {{ product['stock'] }} available</div><p>{{ product['description'] }}</p><div class="detail-price">{{ product['price']|money }} <del>{{ product['old_price']|money }}</del></div><div class="saving">Save {{ (product['old_price']-product['price'])|money }}</div><form method="post" action="{{ url_for('add_to_cart', product_id=product['id']) }}"><button class="btn primary">Add to cart →</button><a class="btn outline" href="{{ url_for('cart') }}">View cart</a></form><div class="product-notes"><span>✓ In stock</span><span>✓ Secure demo checkout</span><span>✓ Cloud-ready deployment</span></div></div>
+</section>
+{% if related %}<section class="container section"><div class="section-title"><h2>You may also like</h2></div><div class="product-grid">{% for p in related %}<article class="product-card"><a class="product-art" href="{{ url_for('product', product_id=p['id']) }}"><span>{{ p['emoji'] }}</span><b>{{ p['category'] }}</b></a><div class="product-body"><a href="{{ url_for('product', product_id=p['id']) }}"><h3>{{ p['name'] }}</h3></a><div class="price">{{ p['price']|money }}</div></div></article>{% endfor %}</div></section>{% endif %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Shop · CloudSecure{% endblock %}
+{% block content %}
+<section class="container section shop-page">
+  <div class="shop-heading"><div><div class="eyebrow">STORE</div><h1>All products</h1><p>Choose from our technology collection.</p></div><span class="result-count">{{ products|length }} products</span></div>
+  <div class="shop-toolbar">
+    <div class="chips"><a class="{{ 'active' if not category else '' }}" href="{{ url_for('shop', q=q) }}">All</a>{% for c in categories %}<a class="{{ 'active' if category==c['category'] else '' }}" href="{{ url_for('shop', category=c['category'], q=q) }}">{{ c['category'] }}</a>{% endfor %}</div>
+    <form><input type="hidden" name="q" value="{{ q }}"><input type="hidden" name="category" value="{{ category }}"><select name="sort" onchange="this.form.submit()"><option value="featured" {{ 'selected' if sort=='featured' }}>Featured</option><option value="price_low" {{ 'selected' if sort=='price_low' }}>Price: low to high</option><option value="price_high" {{ 'selected' if sort=='price_high' }}>Price: high to low</option><option value="rating" {{ 'selected' if sort=='rating' }}>Top rated</option></select></form>
+  </div>
+  {% if q %}<div class="search-result">Showing results for <b>"{{ q }}"</b></div>{% endif %}
+  <div class="product-grid">
+  {% for p in products %}
+    <article class="product-card">
+      <a class="product-art" href="{{ url_for('product', product_id=p['id']) }}"><span>{{ p['emoji'] }}</span><b>{{ p['category'] }}</b></a>
+      <div class="product-body"><a href="{{ url_for('product', product_id=p['id']) }}"><h3>{{ p['name'] }}</h3></a><p>{{ p['description'] }}</p><div class="rating">★ {{ p['rating'] }} <span>·</span> {{ p['stock'] }} in stock</div><div class="price">{{ p['price']|money }} <del>{{ p['old_price']|money }}</del></div><form method="post" action="{{ url_for('add_to_cart', product_id=p['id']) }}"><button class="btn dark full">Add to cart</button></form></div>
+    </article>
+  {% else %}<div class="empty"><div>🔎</div><h2>No products found</h2><p>Try a different search or category.</p><a class="btn primary" href="{{ url_for('shop') }}">Clear filters</a></div>{% endfor %}
+  </div>
+</section>
+{% endblock %}
